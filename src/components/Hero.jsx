@@ -1,7 +1,20 @@
 import { motion } from 'framer-motion'
 import { ArrowDown, Download } from 'lucide-react'
+import { useScroll } from '@react-three/drei'
 
 const Hero = () => {
+    const scroll = useScroll()
+
+    const handleViewWork = () => {
+        const projectsSection = document.getElementById('projects')
+        if (projectsSection && scroll.el) {
+            scroll.el.scrollTo({
+                top: projectsSection.offsetTop,
+                behavior: 'smooth'
+            })
+        }
+    }
+
     return (
         <section className="h-screen w-full flex flex-col justify-center px-6 md:px-20 z-10 pointer-events-none max-w-7xl mx-auto">
             <motion.div
@@ -35,12 +48,20 @@ const Hero = () => {
                 </p>
 
                 <div className="flex gap-4">
-                    <button className="px-8 py-4 bg-cyan-400 text-black font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center gap-2">
+                    <button
+                        onClick={handleViewWork}
+                        className="px-8 py-4 bg-cyan-400 text-black font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center gap-2"
+                    >
                         View Work <ArrowDown size={20} />
                     </button>
-                    <button className="px-8 py-4 bg-transparent border border-white text-white font-bold rounded-full hover:bg-white hover:text-black transition-all flex items-center gap-2">
+                    <a
+                        href="https://drive.google.com/file/d/1_yaHNBfwwnhnm6lD0008jKe9eC6FVBz-/view?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-8 py-4 bg-transparent border border-white text-white font-bold rounded-full hover:bg-white hover:text-black transition-all flex items-center gap-2"
+                    >
                         Resume <Download size={20} />
-                    </button>
+                    </a>
                 </div>
             </motion.div>
         </section>
