@@ -15,7 +15,7 @@ const CanvasContainer = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setPages(window.innerWidth <= 768 ? 10 : 8)
+            setPages(window.innerWidth <= 768 ? 11 : 8)
         }
 
         // Initial check
