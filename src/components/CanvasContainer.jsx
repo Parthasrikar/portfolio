@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Scene from './Scene'
 import { OrbitControls, PerspectiveCamera, ScrollControls, Scroll } from '@react-three/drei'
 import Hero from './Hero'
@@ -9,12 +9,28 @@ import Experience from './Experience'
 import Contact from './Contact'
 
 const CanvasContainer = () => {
+    // Dynamic pages based on screen width
+    // Mobile needs more scroll distance due to vertical stacking
+    const [pages, setPages] = useState(8)
+
+    useEffect(() => {
+        const handleResize = () => {
+            setPages(window.innerWidth <= 768 ? 10 : 8)
+        }
+
+        // Initial check
+        handleResize()
+
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
     return (
-        <div className="w-full h-screen bg-[#050505]">
+        <div className="w-full h-[100dvh] bg-[#050505]">
             <Canvas dpr={[1, 2]}>
                 <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={35} />
                 {/* ScrollControls with damping for smooth feel */}
-                <ScrollControls pages={8} damping={0.1}>
+                <ScrollControls pages={pages} damping={0.1}>
                     <Suspense fallback={null}>
                         <Scene />
                     </Suspense>

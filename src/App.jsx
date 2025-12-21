@@ -2,7 +2,7 @@ import CanvasContainer from './components/CanvasContainer'
 
 function App() {
   return (
-    <main className="relative w-full min-h-screen text-white">
+    <main className="relative w-full h-screen overflow-hidden text-white">
       <CanvasContainer />
     </main>
   )

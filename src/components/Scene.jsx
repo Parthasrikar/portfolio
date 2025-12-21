@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { Float, Stars, Environment, Sphere, Torus, MeshDistortMaterial, useTexture } from '@react-three/drei'
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import * as THREE from 'three'
 import { useScroll as useDreiScroll } from '@react-three/drei'
 
@@ -15,23 +15,23 @@ const Jupiter = ({ scroll }) => {
 
         // Custom path logic
         let tx = -3, ty = 0, tz = -2
-        if (offset < 0.25) {
-            const t = offset / 0.25
+        if (offset < 0.2) {
+            const t = offset / 0.2
             tx = THREE.MathUtils.lerp(-3, -8, t)
             ty = THREE.MathUtils.lerp(0, 4, t)
             tz = THREE.MathUtils.lerp(-2, -10, t)
-        } else if (offset < 0.5) {
-            const t = (offset - 0.25) / 0.25
+        } else if (offset < 0.4) {
+            const t = (offset - 0.2) / 0.2
             tx = THREE.MathUtils.lerp(-8, 5, t)
             ty = THREE.MathUtils.lerp(4, -2, t)
             tz = THREE.MathUtils.lerp(-10, 0, t)
-        } else if (offset < 0.75) {
-            const t = (offset - 0.5) / 0.25
+        } else if (offset < 0.6) {
+            const t = (offset - 0.4) / 0.2
             tx = THREE.MathUtils.lerp(5, -5, t)
             ty = THREE.MathUtils.lerp(-2, 2, t)
             tz = THREE.MathUtils.lerp(0, -5, t)
         } else {
-            const t = (offset - 0.75) / 0.25
+            const t = Math.min((offset - 0.6) / 0.05, 1) // Finish by 0.65
             tx = THREE.MathUtils.lerp(-5, 0, t)
             ty = THREE.MathUtils.lerp(2, 0, t)
             tz = THREE.MathUtils.lerp(-5, -2, t)
@@ -75,23 +75,23 @@ const Earth = ({ scroll }) => {
         const offset = scroll.offset
         let tx = 3, ty = 2, tz = -4
 
-        if (offset < 0.25) {
-            const t = offset / 0.25
+        if (offset < 0.2) {
+            const t = offset / 0.2
             tx = THREE.MathUtils.lerp(3, 8, t)
             ty = THREE.MathUtils.lerp(2, 0, t)
             tz = THREE.MathUtils.lerp(-4, -15, t)
-        } else if (offset < 0.5) {
-            const t = (offset - 0.25) / 0.25
+        } else if (offset < 0.4) {
+            const t = (offset - 0.2) / 0.2
             tx = THREE.MathUtils.lerp(8, -4, t)
             ty = THREE.MathUtils.lerp(0, 3, t)
             tz = THREE.MathUtils.lerp(-15, -2, t)
-        } else if (offset < 0.75) {
-            const t = (offset - 0.5) / 0.25
+        } else if (offset < 0.6) {
+            const t = (offset - 0.4) / 0.2
             tx = THREE.MathUtils.lerp(-4, 4, t)
             ty = THREE.MathUtils.lerp(3, -3, t)
             tz = THREE.MathUtils.lerp(-2, -8, t)
         } else {
-            const t = (offset - 0.75) / 0.25
+            const t = Math.min((offset - 0.6) / 0.05, 1) // Finish by 0.65
             tx = THREE.MathUtils.lerp(4, 3, t)
             ty = THREE.MathUtils.lerp(-3, 2, t)
             tz = THREE.MathUtils.lerp(-8, -4, t)
@@ -133,23 +133,23 @@ const Moon = ({ scroll }) => {
         const offset = scroll.offset
         let tx = 4, ty = -2, tz = -3
 
-        if (offset < 0.25) {
-            const t = offset / 0.25
+        if (offset < 0.2) {
+            const t = offset / 0.2
             tx = THREE.MathUtils.lerp(4, 0, t)
             ty = THREE.MathUtils.lerp(-2, -5, t)
             tz = THREE.MathUtils.lerp(-3, 0, t)
-        } else if (offset < 0.5) {
-            const t = (offset - 0.25) / 0.25
+        } else if (offset < 0.4) {
+            const t = (offset - 0.2) / 0.2
             tx = THREE.MathUtils.lerp(0, 0, t)
             ty = THREE.MathUtils.lerp(-5, 0, t)
             tz = THREE.MathUtils.lerp(0, -10, t)
-        } else if (offset < 0.75) {
-            const t = (offset - 0.5) / 0.25
+        } else if (offset < 0.6) {
+            const t = (offset - 0.4) / 0.2
             tx = THREE.MathUtils.lerp(0, 0, t)
             ty = THREE.MathUtils.lerp(0, 0, t)
             tz = THREE.MathUtils.lerp(-10, 0, t)
         } else {
-            const t = (offset - 0.75) / 0.25
+            const t = Math.min((offset - 0.6) / 0.05, 1) // Finish by 0.65
             tx = THREE.MathUtils.lerp(0, 4, t)
             ty = THREE.MathUtils.lerp(0, -2, t)
             tz = THREE.MathUtils.lerp(0, -3, t)
@@ -186,23 +186,23 @@ const Moon = ({ scroll }) => {
 // Helper to get dynamic position based on scroll offset (matches Moon logic)
 const getMoonPosition = (offset) => {
     let tx = 4, ty = -2, tz = -3
-    if (offset < 0.25) {
-        const t = offset / 0.25
+    if (offset < 0.2) {
+        const t = offset / 0.2
         tx = THREE.MathUtils.lerp(4, 0, t)
         ty = THREE.MathUtils.lerp(-2, -5, t)
         tz = THREE.MathUtils.lerp(-3, 0, t)
-    } else if (offset < 0.5) {
-        const t = (offset - 0.25) / 0.25
+    } else if (offset < 0.4) {
+        const t = (offset - 0.2) / 0.2
         tx = THREE.MathUtils.lerp(0, 0, t)
         ty = THREE.MathUtils.lerp(-5, 0, t)
         tz = THREE.MathUtils.lerp(0, -10, t)
-    } else if (offset < 0.75) {
-        const t = (offset - 0.5) / 0.25
+    } else if (offset < 0.6) {
+        const t = (offset - 0.4) / 0.2
         tx = THREE.MathUtils.lerp(0, 0, t)
         ty = THREE.MathUtils.lerp(0, 0, t)
         tz = THREE.MathUtils.lerp(-10, 0, t)
     } else {
-        const t = (offset - 0.75) / 0.25
+        const t = Math.min((offset - 0.6) / 0.05, 1)
         tx = THREE.MathUtils.lerp(0, 4, t)
         ty = THREE.MathUtils.lerp(0, -2, t)
         tz = THREE.MathUtils.lerp(0, -3, t)
@@ -213,8 +213,8 @@ const getMoonPosition = (offset) => {
 // Helper for Earth position (matches Earth logic)
 const getEarthPosition = (offset) => {
     let tx = 3, ty = 2, tz = -4
-    if (offset < 0.25) {
-        const t = offset / 0.25
+    if (offset < 0.2) {
+        const t = offset / 0.2
         tx = THREE.MathUtils.lerp(3, 8, t)
         ty = THREE.MathUtils.lerp(2, 0, t)
         tz = THREE.MathUtils.lerp(-4, -15, t)
@@ -223,41 +223,44 @@ const getEarthPosition = (offset) => {
     return new THREE.Vector3(tx, ty, tz)
 }
 
-// Comets Component (Shooting Stars) - Slower, Steeper, Fiery
+// Comets Component (Shooting Stars) - Full Screen Coverage
 const Comets = () => {
     const group = useRef()
-    const cometsData = useRef([
-        { x: -10, y: 10, z: -10, speed: 0.01, delay: 0 },
-        { x: -15, y: 5, z: -15, speed: 0.1, delay: 2 },
-        { x: -20, y: 0, z: -12, speed: 0.01, delay: 4 }
+    const [cometsData] = useState([
+        { x: -20, y: 15, z: -10, speed: 0.12 },
+        { x: -35, y: 10, z: -15, speed: 0.18 },
+        { x: -50, y: 5, z: -12, speed: 0.1 },
+        { x: -15, y: 25, z: -8, speed: 0.15 },
+        { x: -40, y: 20, z: -20, speed: 0.2 },
+        { x: -10, y: 30, z: -15, speed: 0.11 }
     ])
 
     useFrame((state, delta) => {
         if (!group.current) return
 
         group.current.children.forEach((mesh, i) => {
-            const data = cometsData.current[i]
+            const data = cometsData[i]
 
             // Move comet
             mesh.position.x += data.speed
-            mesh.position.y -= data.speed * 0.2 // Steeper angle
+            mesh.position.y -= data.speed * 2.2 // Steeper slope for better screen traversal
 
-            // Reset if out of view
-            if (mesh.position.x > 15 || mesh.position.y < -10) {
-                mesh.position.x = -15 - Math.random() * 10
-                mesh.position.y = 10 + Math.random() * 5
-                mesh.position.z = -10 - Math.random() * 10
+            // Reset if out of view (Very wide bounds to ensure they cross the whole viewport)
+            if (mesh.position.x > 60 || mesh.position.y < -60) {
+                mesh.position.x = -40 - Math.random() * 40
+                mesh.position.y = 30 + Math.random() * 20
+                mesh.position.z = -10 - Math.random() * 20
             }
         })
     })
 
     return (
         <group ref={group}>
-            {cometsData.current.map((_, i) => (
-                <mesh key={i} position={[_.x, _.y, _.z]} rotation={[0, 0, -0.6]}>
+            {cometsData.map((_, i) => (
+                <mesh key={i} position={[_.x, _.y, _.z]} rotation={[0, 0, -1.1]}>
                     <sphereGeometry args={[0.08, 8, 8]} />
                     <meshBasicMaterial color="#ffedd5" transparent opacity={0.9} />
-                    {/* Tail - Fiery Orange/Yellow */}
+                    {/* Tail */}
                     <mesh position={[-1.2, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
                         <cylinderGeometry args={[0.02, 0.1, 2.5, 8]} />
                         <meshBasicMaterial color="#fb923c" transparent opacity={0.4} />
@@ -274,9 +277,8 @@ const Rocket = ({ scroll }) => {
     useFrame((state) => {
         const offset = scroll.offset
 
-        // Flight covers almost the entire scroll (0 to 0.95)
-        // Lands just as we reach the end
-        const flightDuration = 0.95
+        // Rocket ends flight near the Journey section
+        const flightDuration = 0.65
         const moonRadiusOffset = new THREE.Vector3(0, 0.6, 0)
 
         if (offset < flightDuration) {
@@ -359,13 +361,40 @@ const Rocket = ({ scroll }) => {
 const MovingPlanets = () => {
     const scroll = useDreiScroll()
     const group = useRef()
+    const gyro = useRef({ x: 0, y: 0 })
+
+    useEffect(() => {
+        const handleOrientation = (event) => {
+            // Gamma: Left/Right (-90 to 90)
+            // Beta: Front/Back (-180 to 180)
+            // Neutral holding position approx 45 degrees
+            const x = event.gamma ? event.gamma / 20 : 0
+            const y = event.beta ? (event.beta - 45) / 20 : 0
+
+            gyro.current = { x, y }
+        }
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', handleOrientation)
+        }
+
+        return () => {
+            if (window.DeviceOrientationEvent) {
+                window.removeEventListener('deviceorientation', handleOrientation)
+            }
+        }
+    }, [])
 
     useFrame((state) => {
-        // Only apply parallax in the Hero section (scroll.offset near 0)
-        // Damping the mouse movement for smooth feel
-        if (scroll.offset < 0.1 && group.current) {
-            group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, state.pointer.x * 2, 0.1)
-            group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, state.pointer.y * 2, 0.1)
+        // Only apply parallax until we reach the Journey section (Experience)
+        // Damping the movement for smooth feel
+        if (scroll.offset < 0.6 && group.current) {
+            // Combine mouse pointer and gyro input
+            const targetX = (state.pointer.x * 2) + (gyro.current.x * 2)
+            const targetY = (state.pointer.y * 2) + (gyro.current.y * 2)
+
+            group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, targetX, 0.1)
+            group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, targetY, 0.1)
         } else if (group.current) {
             // Reset orbit when scrolling down
             group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, 0, 0.1)
