@@ -1,105 +1,193 @@
 import { motion } from 'framer-motion'
-import { Briefcase, GraduationCap, Calendar } from 'lucide-react'
+import { useResponsive } from '../hooks/useResponsive'
 
-const experiences = [
-    {
-        type: "work",
-        title: "Software Development Intern",
-        organization: "Inncircles",
-        period: "4 Months (Current)",
-        description: "Led team implementing new features and optimizing performance. Implemented AWS SQS and Kafka for message queuing."
-    },
-    {
-        type: "work",
-        title: "ACM Web Dev Lead",
-        organization: "ACM Student Chapter",
-        period: "2023 - 2024",
-        description: "Led 15+ students, organized workshops with 90% satisfaction rate."
-    },
-    {
-        type: "education",
-        title: "B.Tech Computer Science",
-        organization: "Vignan's Institute",
-        period: "Expected May 2026",
-        description: "CGPA: 9.10"
-    },
-    {
-        type: "education",
-        title: "Intermediate (12th)",
-        organization: "Sri Chaitanya",
-        period: "Completed",
-        description: "84.2%"
-    },
-    {
-        type: "education",
-        title: "SSC (10th)",
-        organization: "Sri Chaitanya",
-        period: "Completed",
-        description: "91%"
-    }
+const items = [
+  {
+    role: 'Software Developer',
+    company: 'Inncircles',
+    period: '2025 — Present',
+    type: 'Full-time',
+    bullets: [
+      'Engineered scalable RESTful APIs for enterprise-grade web applications, ensuring high maintainability and performance',
+      'Architected a reusable Angular UI component library adopted across multiple product teams, streamlining cross-team development',
+      'Built reliable async message processing pipelines integrating AWS SQS and Kafka with backend services',
+      'Managed cloud infrastructure and media storage pipelines using AWS EC2 and S3',
+      'Architected MCP servers to expose internal APIs as AI-consumable tools, enabling LLM-driven workflow automation',
+    ],
+    tags: ['Node.js', 'Angular', 'AWS', 'Kafka', 'MCP', 'REST APIs'],
+  },
 ]
 
-const Experience = () => {
-    return (
-        <section className="min-h-screen w-full py-20 px-6 md:px-20 relative z-10 pointer-events-none">
-            <div className="pointer-events-auto">
-                <motion.h2
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-4xl md:text-5xl font-bold mb-20 text-center"
-                >
-                    Journey & <span className="text-secondary">Education</span>
-                </motion.h2>
-
-                <div className="max-w-4xl mx-auto relative">
-                    {/* Vertical Line - Space Gradient */}
-                    <div className="absolute left-0 md:left-1/2 w-1 h-full bg-gradient-to-b from-cyan-500 via-purple-500 to-cyan-500 shadow-[0_0_15px_rgba(168,85,247,0.5)]" />
-
-                    {experiences.map((item, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className={`relative flex items-center justify-between mb-12 md:mb-24 ${index % 2 === 0 ? "md:flex-row-reverse" : ""
-                                }`}
-                        >
-                            {/* Empty Space for Grid alignment */}
-                            <div className="hidden md:block w-5/12" />
-
-                            {/* Dot - Glowing Planet Node */}
-                            <div className="absolute left-[-8px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 bg-[#000] border-4 border-cyan-400 rounded-full shadow-[0_0_20px_#22d3ee] z-10" />
-
-                            {/* Content Card - Space Glass */}
-                            <div className="w-full md:w-5/12 pl-10 md:pl-0">
-                                <div className="relative group p-[1px] rounded-2xl bg-gradient-to-r from-cyan-500/50 via-purple-500/50 to-cyan-500/50 hover:bg-gradient-to-r hover:from-cyan-400 hover:via-purple-400 hover:to-cyan-400 transition-all duration-500">
-                                    <div className="bg-[#0a0a0a]/90 backdrop-blur-xl p-6 rounded-2xl h-full relative overflow-hidden">
-                                        {/* Subtle Grid Background */}
-                                        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-
-                                        <div className="relative z-10">
-                                            <div className="flex items-center gap-3 mb-2 text-cyan-400">
-                                                {item.type === 'work' ? <Briefcase size={20} /> : <GraduationCap size={20} />}
-                                                <span className="text-sm font-semibold tracking-wider uppercase drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">{item.type}</span>
-                                            </div>
-                                            <h3 className="text-xl font-bold mb-1 text-white group-hover:text-cyan-200 transition-colors">{item.title}</h3>
-                                            <h4 className="text-lg text-purple-400 mb-4">{item.organization}</h4>
-                                            <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-                                                <Calendar size={16} />
-                                                <span>{item.period}</span>
-                                            </div>
-                                            <p className="text-gray-300 leading-relaxed font-light">{item.description}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    )
+function CardBorder() {
+  return (
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      borderRadius: 20,
+      pointerEvents: 'none',
+      border: '1px solid transparent',
+      backgroundImage: 'linear-gradient(135deg, rgba(94,210,156,0.3) 0%, rgba(255,255,255,0.04) 60%, rgba(94,210,156,0.1) 100%)',
+      backgroundOrigin: 'border-box',
+      WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+      WebkitMaskComposite: 'xor',
+      maskComposite: 'exclude',
+    }} />
+  )
 }
 
-export default Experience
+export default function Experience() {
+  const { isMobile } = useResponsive()
+  return (
+    <section id="experience" style={{ background: '#070b0a', padding: isMobile ? '80px 16px' : '120px 24px' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{ marginBottom: 64 }}
+        >
+          <p style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 700,
+            fontSize: 11,
+            color: '#5ed29c',
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            marginBottom: 12,
+          }}>Experience</p>
+          <h2 style={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 800,
+            fontSize: 'clamp(28px, 4vw, 48px)',
+            color: 'white',
+            letterSpacing: '-0.03em',
+            lineHeight: 1.1,
+          }}>
+            Where I've{' '}
+            <em style={{ fontFamily: "'Instrument Serif', serif", fontStyle: 'italic', color: '#5ed29c' }}>shipped</em>.
+          </h2>
+        </motion.div>
+
+        {/* Timeline */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {items.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              style={{ position: 'relative' }}
+            >
+              <div style={{
+                position: 'relative',
+                background: 'rgba(255,255,255,0.025)',
+                backdropFilter: 'blur(8px)',
+                borderRadius: 20,
+                padding: isMobile ? '24px 20px' : '36px 40px',
+                overflow: 'hidden',
+              }}>
+                <CardBorder />
+
+                {/* Top row */}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap',
+                  gap: 12,
+                  marginBottom: 24,
+                }}>
+                  <div>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontWeight: 800,
+                      fontSize: isMobile ? 18 : 22,
+                      color: 'white',
+                      letterSpacing: '-0.02em',
+                    }}>{item.role}</p>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 15,
+                      color: '#5ed29c',
+                      fontWeight: 600,
+                      marginTop: 4,
+                    }}>{item.company}</p>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 12,
+                      color: 'rgba(255,255,255,0.4)',
+                      letterSpacing: '0.08em',
+                    }}>{item.period}</span>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 10,
+                      color: '#5ed29c',
+                      background: 'rgba(94,210,156,0.1)',
+                      padding: '3px 10px',
+                      borderRadius: 999,
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                    }}>{item.type}</span>
+                  </div>
+                </div>
+
+                {/* Bullets */}
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+                  {item.bullets.map((b, j) => (
+                    <li key={j} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      <span style={{
+                        color: '#5ed29c',
+                        fontSize: 12,
+                        marginTop: 2,
+                        flexShrink: 0,
+                      }}>▸</span>
+                      <span style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 14,
+                        color: 'rgba(255,255,255,0.65)',
+                        lineHeight: 1.65,
+                      }}>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {item.tags.map((tag) => (
+                    <span key={tag} style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 11,
+                      color: 'rgba(255,255,255,0.5)',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      padding: '4px 12px',
+                      borderRadius: 999,
+                      letterSpacing: '0.06em',
+                    }}>{tag}</span>
+                  ))}
+                </div>
+
+                {/* Decorative glow */}
+                <div style={{
+                  position: 'absolute',
+                  top: -60,
+                  right: -60,
+                  width: 180,
+                  height: 180,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(94,210,156,0.06) 0%, transparent 70%)',
+                  pointerEvents: 'none',
+                }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

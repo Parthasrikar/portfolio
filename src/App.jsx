@@ -1,11 +1,21 @@
-import CanvasContainer from './components/CanvasContainer'
+import Nav from './components/Nav'
+import Hero from './components/Hero'
+import Experience from './components/Experience'
+import Projects from './components/Projects'
+import Skills from './components/Skills'
+import About from './components/About'
+import Contact from './components/Contact'
 
-function App() {
+export default function App() {
   return (
-    <main className="relative w-full h-screen overflow-hidden text-white">
-      <CanvasContainer />
-    </main>
+    <div style={{ background: '#070b0a', minHeight: '100vh' }}>
+      <Nav />
+      <Hero />
+      <Experience />
+      <Projects />
+      <Skills />
+      <About />
+      <Contact />
+    </div>
   )
 }
-
-export default App

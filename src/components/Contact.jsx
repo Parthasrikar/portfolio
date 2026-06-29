@@ -1,63 +1,230 @@
+import { useRef, useEffect, useState } from 'react'
+import Hls from 'hls.js'
 import { motion } from 'framer-motion'
-import { Mail, Linkedin, Github, Twitter } from 'lucide-react'
+import { ArrowRight, Mail, GitBranch, Link, ExternalLink } from 'lucide-react'
+import { useResponsive } from '../hooks/useResponsive'
 
-const Contact = () => {
-    return (
-        <section className="min-h-screen w-full py-20 px-6 md:px-20 relative z-10 pb-40 pointer-events-none flex items-center justify-center">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="max-w-4xl mx-auto pointer-events-auto"
-            >
-                {/* Holographic Card Container */}
-                <div className="relative rounded-3xl p-[1px] bg-gradient-to-b from-cyan-500/30 via-transparent to-purple-500/30 overflow-hidden">
-                    {/* Background glow effects */}
-                    <div className="absolute top-0 left-1/4 w-full h-1/2 bg-cyan-500/10 blur-[100px]" />
-                    <div className="absolute bottom-0 right-1/4 w-full h-1/2 bg-purple-500/10 blur-[100px]" />
+const HLS_URL = 'https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8'
 
-                    <div className="bg-[#050505]/80 backdrop-blur-2xl p-10 md:p-16 rounded-3xl relative z-10">
+export default function Contact() {
+  const videoRef = useRef(null)
+  const [videoLoaded, setVideoLoaded] = useState(false)
+  const { isMobile } = useResponsive()
 
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
-                            Establish <span className="text-white">Connection</span>
-                        </h2>
-                        <p className="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
-                            Ready to launch your next project? Initialize communication channels below.
-                        </p>
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    let hls
 
-                        <form action="mailto:parthasrikar853@gmail.com" method="post" encType="text/plain" className="max-w-md mx-auto space-y-6 text-left">
-                            <div className="group">
-                                <label className="block text-xs font-mono text-cyan-400 mb-2 uppercase tracking-widest">Operator Name</label>
-                                <input type="text" name="name" className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-cyan-400 focus:bg-cyan-900/10 focus:shadow-[0_0_15px_rgba(34,211,238,0.3)] transition-all duration-300" placeholder="Enter identification" required />
-                            </div>
-                            <div className="group">
-                                <label className="block text-xs font-mono text-purple-400 mb-2 uppercase tracking-widest">Signal Frequency (Email)</label>
-                                <input type="email" name="email" className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-purple-400 focus:bg-purple-900/10 focus:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all duration-300" placeholder="name@domain.com" required />
-                            </div>
-                            <div className="group">
-                                <label className="block text-xs font-mono text-cyan-400 mb-2 uppercase tracking-widest">Encryption Message</label>
-                                <textarea name="message" rows="4" className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white focus:outline-none focus:border-cyan-400 focus:bg-cyan-900/10 focus:shadow-[0_0_15px_rgba(34,211,238,0.3)] transition-all duration-300" placeholder="Transmitting data..." required></textarea>
-                            </div>
-                            <button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 rounded-lg hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group">
-                                <span className="relative z-10 flex items-center justify-center gap-2">
-                                    Initialize Transmission <Mail size={20} />
-                                </span>
-                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                            </button>
-                        </form>
+    if (Hls.isSupported()) {
+      hls = new Hls({ enableWorker: false })
+      hls.loadSource(HLS_URL)
+      hls.attachMedia(video)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {})
+        setVideoLoaded(true)
+      })
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = HLS_URL
+      video.addEventListener('loadedmetadata', () => {
+        video.play().catch(() => {})
+        setVideoLoaded(true)
+      })
+    }
 
-                        <div className="flex justify-center gap-8 mt-16 border-t border-white/5 pt-10">
-                            {[Linkedin, Github, Twitter].map((Icon, i) => (
-                                <a key={i} href="#" className="p-4 bg-white/5 rounded-full hover:bg-cyan-500/20 hover:text-cyan-400 hover:scale-110 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all duration-300 border border-white/5">
-                                    <Icon size={24} />
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
-        </section>
-    )
+    return () => hls?.destroy()
+  }, [])
+
+  return (
+    <section id="contact" style={{ position: 'relative', overflow: 'hidden', background: '#070b0a', padding: isMobile ? '80px 20px 60px' : '120px 24px 80px' }}>
+      {/* Background video */}
+      <video
+        ref={videoRef}
+        muted
+        autoPlay
+        loop
+        playsInline
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: videoLoaded ? 0.35 : 0,
+          transition: 'opacity 1.5s ease',
+          zIndex: 0,
+        }}
+      />
+      {/* Top gradient to blend with previous section smoothly */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+        background: 'linear-gradient(to bottom, #070b0a 0%, transparent 40%)',
+      }} />
+
+      <div style={{ position: 'relative', zIndex: 10, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+        {/* Central glow */}
+        <div style={{
+          position: 'relative',
+          marginBottom: 80,
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            height: 400,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(94,210,156,0.06) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              color: '#5ed29c',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              marginBottom: 20,
+            }}
+          >Contact</motion.p>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(32px, 5vw, 60px)',
+              color: 'white',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              marginBottom: 20,
+            }}
+          >
+            Let's build something{' '}
+            <em style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontStyle: 'italic',
+              color: '#5ed29c',
+              fontWeight: 400,
+            }}>great</em>
+            <span style={{ color: '#5ed29c' }}>.</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 15,
+              color: 'rgba(255,255,255,0.5)',
+              lineHeight: 1.8,
+              maxWidth: 480,
+              margin: '0 auto 40px',
+            }}
+          >
+            Open to full-time roles, freelance projects, and interesting
+            collaboration. I respond within 24 hours.
+          </motion.p>
+
+          <motion.a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=parthasrikar853@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 14,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#070b0a',
+              background: '#5ed29c',
+              padding: '16px 36px',
+              borderRadius: 999,
+              textDecoration: 'none',
+              transition: 'filter 0.2s, transform 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.12)'; e.currentTarget.style.transform = 'scale(1.04)' }}
+            onMouseLeave={e => { e.currentTarget.style.filter = 'brightness(1)'; e.currentTarget.style.transform = 'scale(1)' }}
+          >
+            Say Hello <ArrowRight size={16} />
+          </motion.a>
+        </div>
+
+        {/* Divider */}
+        <div style={{
+          height: 1,
+          background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)',
+          marginBottom: 40,
+        }} />
+
+        {/* Footer links */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: isMobile ? 'center' : 'space-between',
+            alignItems: 'center',
+            gap: isMobile ? 16 : 20,
+          }}
+        >
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 13,
+            color: 'rgba(255,255,255,0.25)',
+          }}>
+            Partha<span style={{ color: '#5ed29c' }}>Srikar</span> © 2025
+          </p>
+
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            {[
+              { icon: <Mail size={15} />, href: 'https://mail.google.com/mail/?view=cm&fs=1&to=parthasrikar853@gmail.com', label: 'Email' },
+              { icon: <GitBranch size={15} />, href: 'https://github.com/parthasrikar', label: 'GitHub' },
+              { icon: <Link size={15} />, href: 'https://www.linkedin.com/in/parthasrikar/', label: 'LinkedIn' },
+              { icon: <ExternalLink size={15} />, href: 'https://parthasrikar.me/', label: 'Portfolio' },
+            ].map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={item.label}
+                style={{
+                  color: 'rgba(255,255,255,0.35)',
+                  transition: 'color 0.2s',
+                  textDecoration: 'none',
+                  display: 'flex',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = '#5ed29c'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
+              >
+                {item.icon}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
 }
-
-export default Contact

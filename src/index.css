@@ -1,35 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-
 @import "tailwindcss";
 
-html,
-body,
-#root {
-  width: 100%;
-  height: 100dvh;
+:root {
+  --accent: #5ed29c;
+  --bg: #070b0a;
+  --bg-card: #0d1412;
+}
+
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background: #000;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
   color: white;
   font-family: 'Inter', sans-serif;
-  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Custom Scrollbar for non-3D sections if needed */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: #070b0a;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: #5ed29c33;
+  border-radius: 2px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+::selection {
+  background: #5ed29c33;
+  color: #5ed29c;
 }
