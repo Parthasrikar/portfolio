@@ -188,10 +188,14 @@ export default function Nav() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                color: 'white',
+                padding: 6,
               }}
             >
-              <Menu size={20} />
+              <img
+                src="/laptop.png"
+                alt="Open navigation menu"
+                style={{ width: 20, height: 20, objectFit: 'contain' }}
+              />
             </motion.button>
           )}
         </div>
