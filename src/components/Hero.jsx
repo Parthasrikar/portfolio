@@ -8,7 +8,7 @@ const HLS_URL = 'https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnN
 
 function LiquidGlassCard({ isMobile }) {
   const w = isMobile ? 180 : 220
-  const h = isMobile ? 168 : 200
+  const h = isMobile ? 190 : 200
   return (
     <div style={{ position: 'relative', width: w, height: h, borderRadius: 16 }}>
       {/* Glass layer */}
